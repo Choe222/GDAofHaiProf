@@ -9,12 +9,11 @@ def GDA_update(model, loss_fn, x_batch, y_batch, optimizer, lambda_lr, sigma=0.5
     loss_k.backward() # Tính gradient \nabla f(x^k)
 
     
-    with torch.no_grad(): # ngăn tạo ra gradient mới 
-        grads = []
-        old_params = []
-        for param in model.parameters():
-            grads.append(param.grad.clone()) # param.grad.clone() = tạo 1 bản sao của gradient tại tham số đó 
-            old_params.append(param.data.clone())
+     grads = []
+     old_params = []
+     for param in model.parameters():
+         grads.append(param.grad.clone()) # param.grad.clone() = tạo 1 bản sao của gradient tại tham số đó 
+         old_params.append(param.data.clone())
 
     
     with torch.no_grad():
