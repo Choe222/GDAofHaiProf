@@ -19,7 +19,7 @@ def GDA_update(model, loss_fn, x_batch, y_batch, optimizer, lambda_lr, sigma=0.5
     
     with torch.no_grad():
         for param in model.parameters():
-            param.data -= lambda_lr * param.grad
+            param.add_(param,alpha=-lambda_lr)
 
     
     outputs_k_plus_1 = model(x_batch)
