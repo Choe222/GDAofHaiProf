@@ -74,11 +74,8 @@ def train_and_evaluate(model, train_loader, val_loader, epochs=10, learning_rate
     plt.title("Training Loss Curve (per batch)", fontsize=16)
     plt.xlabel("Batch index", fontsize=14)
     plt.ylabel("Loss", fontsize=14)
-
     plt.grid(True)
-
-    # Nếu loss của bạn có lúc rất lớn → scale log giúp nhìn rõ dạng đường cong
-    plt.yscale("log")     # Bỏ dòng này nếu muốn thang thường
+    plt.yscale("log")     
     plt.savefig("Adam.png", dpi=300, bbox_inches='tight')
     plt.show()
 

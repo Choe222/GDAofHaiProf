@@ -11,7 +11,7 @@ x2 = torch.tensor(54.5, requires_grad=True, dtype=torch.float64)
 
 i = 10000
 params = [x1, x2]
-optimizer = GDA(params=params, lr=0.7, sigma=0.8, k=0.75,projFunc=clamp) 
+optimizer = GDA(params=params, lr=1e-3, sigma=0.7, k=1,projFunc=clamp) 
 
 best_val = float('inf')
 fc = []   
@@ -37,9 +37,10 @@ except convergence:
     
 plt.figure(figsize=(8, 5))
 plt.plot(fc)
-plt.title("Tốc độ hội tụ của GDA đối với hàm lồi")
+plt.title("Rate of convergence of GDA with convex funtion")
 plt.xlabel("Iteration")
 plt.ylabel("Value of function")
 plt.grid(True)
-plt.savefig("GDAWithConvex.png", dpi=300, bbox_inches='tight')
+plt.tight_layout()
+plt.savefig('GDA.png')
 plt.show()

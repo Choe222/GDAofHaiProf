@@ -14,7 +14,7 @@ class MLP(nn.Module):
             nn.Linear(64,3)
 
         )
-
+        
     def forward(self, input):
         logits = self.classificasionHead(input)
         return logits

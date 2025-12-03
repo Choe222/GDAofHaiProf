@@ -12,6 +12,7 @@ class MLPR(nn.Module):
             nn.ReLU(),
             nn.Dropout(0.1),
             nn.Linear(32,1))
+        
     def forward(self, input):
         pred = self.regressionHead(input)
         return input
