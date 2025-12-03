@@ -1,4 +1,4 @@
-def GDA_update(model, loss_fn, x, y, lambda_lr, sigma=0.5, kappa=0.5):
+def GDA_update(model, loss_fn, x, y, lr, sigma=0.5, kappa=0.5):
     for param in model.parameters():
         param.grad = None
     outputs_k = model(x)
@@ -9,7 +9,7 @@ def GDA_update(model, loss_fn, x, y, lambda_lr, sigma=0.5, kappa=0.5):
         for param in model.parameters():
             t=param.data.clone()
             grad = param.grad
-            param.add_(param.data,alpha=-lambda_lr)
+            param.add_(grad,alpha=-lr)
             diff = t - param.data
             inner_product += (grad * diff).sum().item() 
 
@@ -18,8 +18,8 @@ def GDA_update(model, loss_fn, x, y, lambda_lr, sigma=0.5, kappa=0.5):
 
     descent_condition = loss <= (loss_k - sigma * inner_product)
     if descent_condition:
-        new_lambda = lambda_lr 
+        new_lambda = lr 
     else:
-        new_lambda = kappa * lambda_lr 
+        new_lambda = kappa * lr 
 
     return new_lambda, loss_k.item()
