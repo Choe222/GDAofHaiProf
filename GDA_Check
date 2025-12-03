@@ -1,0 +1,45 @@
+import torch
+
+def GDA_update(model, loss_fn, x_batch, y_batch, optimizer, lambda_lr, sigma=0.5, kappa=0.5):
+   
+   
+    optimizer.zero_grad() # Xóa gradient, đặt gradient tại mọi nơi =0
+    outputs_k = model(x_batch)
+    loss_k = loss_fn(outputs_k, y_batch) 
+    loss_k.backward() # Tính gradient \nabla f(x^k)
+
+    
+    with torch.no_grad(): # ngăn tạo ra gradient mới 
+        grads = []
+        old_params = []
+        for param in model.parameters():
+            grads.append(param.grad.clone()) # param.grad.clone() = tạo 1 bản sao của gradient tại tham số đó 
+            old_params.append(param.data.clone())
+
+    
+    with torch.no_grad():
+        for param in model.parameters():
+            param.data -= lambda_lr * param.grad
+
+    
+    outputs_k_plus_1 = model(x_batch)
+    loss_k_plus_1 = loss_fn(outputs_k_plus_1, y_batch)
+
+    
+    inner_product = 0
+    with torch.no_grad():
+        for i, param in enumerate(model.parameters()):
+            diff = old_params[i] - param.data # x_k - x_(k+1)
+            inner_product += torch.sum(grads[i] * diff) # hàm tính tích vô hướng <f'(x_k),x_k-x_(k+1)>
+
+    
+    descent_condition = loss_k_plus_1 <= (loss_k - sigma * inner_product)
+
+    
+    if descent_condition:
+        new_lambda = lambda_lr 
+    else:
+        new_lambda = kappa * lambda_lr 
+
+    return new_lambda, loss_k.item()
+
